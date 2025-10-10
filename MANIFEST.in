@@ -1,0 +1,2 @@
+recursive-include blendxcoursecreator/patches *
+recursive-include blendxcoursecreator/templates *
