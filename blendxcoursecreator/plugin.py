@@ -36,6 +36,7 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
 
         # Blend-ed Cloud AI Course Creator API Key
         ("BLENDXCOURSECREATOR_BLENDX_AICC_KEY", "your-api-key-here"),
+        ("BLENDXCOURSECREATOR_BLENDX_AICC_APP_URL", "https://aicc.blendxed.com"),
     ]
 )
 
