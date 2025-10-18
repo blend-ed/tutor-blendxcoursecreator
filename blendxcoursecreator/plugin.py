@@ -92,7 +92,7 @@ def _get_mfe_version():
 def _add_my_mfe(mfes):
 
     mfes["course-creator"] = {
-        "repository": "https://github.com/blend-ed/frontend-app-course-creator",
+        "repository": "https://github.com/blend-ed/frontend-app-course-creator.git",
         "port": 8009,
         "version": _get_mfe_version()
     }
