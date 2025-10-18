@@ -3,6 +3,7 @@ from glob import glob
 
 import click
 import importlib_resources
+from dotenv import load_dotenv
 
 from tutor import hooks
 from tutormfe.hooks import MFE_APPS
@@ -86,14 +87,22 @@ for path in glob(str(importlib_resources.files("blendxcoursecreator") / "patches
 #######################################
 
 def _get_mfe_version():
+    load_dotenv()
     return os.getenv("COURSE_CREATOR_MFE_VERSION", "master")
+
+def _get_github_pat():
+    load_dotenv()
+    if os.getenv("GITHUB_PAT"):
+        return f"{os.getenv('GITHUB_PAT')}@"
+    else:
+        return ""
 
 
 @MFE_APPS.add()
 def _add_my_mfe(mfes):
 
     mfes["course-creator"] = {
-        "repository": "https://github.com/blend-ed/frontend-app-course-creator.git",
+        "repository": f"https://{_get_github_pat()}github.com/blend-ed/frontend-app-course-creator.git",
         "port": 8009,
         "version": _get_mfe_version()
     }
