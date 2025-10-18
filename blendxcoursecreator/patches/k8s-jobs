@@ -1,0 +1,55 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: blendxccapp-job
+  labels:
+    app.kubernetes.io/component: job
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: blendxccapp
+          image: {{ BLENDXCCAPP_DOCKER_IMAGE }}
+          env:
+            - name: ADMIN_SECRET_KEY
+              value: "{{ BLENDXCCAPP_ADMIN_SECRET_KEY }}"
+            - name: PORTKEY_API_KEY
+              value: "{{ BLENDXCOURSECREATOR_PORTKEY_API_KEY }}"
+            - name: PORTKEY_GATEWAY_URL
+              value: "{{ BLENDXCOURSECREATOR_PORTKEY_GATEWAY_URL | default('https://api.portkey.ai/v1') }}"
+            - name: PORTKEY_CHAT_MODEL
+              value: "{{ BLENDXCOURSECREATOR_PORTKEY_CHAT_MODEL | default('gpt-4.1') }}"
+            - name: PORTKEY_IMAGE_MODEL
+              value: "{{ BLENDXCOURSECREATOR_PORTKEY_IMAGE_MODEL | default('dall-e-3') }}"
+            - name: PORTKEY_EMBEDDING_MODEL
+              value: "{{ BLENDXCOURSECREATOR_PORTKEY_EMBEDDING_MODEL | default('text-embedding-3-large') }}"
+            - name: PORTKEY_CHAT_PROVIDER
+              value: "{{ BLENDXCOURSECREATOR_PORTKEY_CHAT_PROVIDER | default('@blended-chat') }}"
+            - name: PORTKEY_IMAGE_PROVIDER
+              value: "{{ BLENDXCOURSECREATOR_PORTKEY_IMAGE_PROVIDER | default('@blended-image') }}"
+            - name: PORTKEY_EMBEDDING_PROVIDER
+              value: "{{ BLENDXCOURSECREATOR_PORTKEY_EMBEDDING_PROVIDER | default('@blended-embedding') }}"
+            - name: DATABASE_URL
+              value: "mysql+pymysql://{{ BLENDXCCAPP_MYSQL_USERNAME }}:{{ BLENDXCCAPP_MYSQL_PASSWORD }}@{{ MYSQL_HOST }}:{{ MYSQL_PORT }}/{{ BLENDXCCAPP_MYSQL_DATABASE }}"
+            - name: CELERY_BROKER_URL
+              value: "redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/0"
+            - name: CELERY_RESULT_BACKEND
+              value: "redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/0"
+            - name: TEMP_DIR
+              value: "/app/temp_courses"
+            - name: EXPORT_DIR
+              value: "/app/course_exports"
+            - name: DEBUG
+              value: "{{ DEBUG | default(false) | tojson }}"
+            - name: SECRET_KEY
+              value: "{{ BLENDXCCAPP_SECRET_KEY }}"
+          volumeMounts:
+            - mountPath: /app/config
+              name: config
+              subPath: config.py
+      volumes:
+        - name: config
+          configMap:
+            name: blendxccapp-config

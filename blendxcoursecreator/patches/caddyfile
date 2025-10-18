@@ -1,0 +1,4 @@
+# BlendX AI Course Creator
+{{ BLENDXCCAPP_HOST }}{$default_site_port} {
+    import proxy "blendxccapp:8000"
+}

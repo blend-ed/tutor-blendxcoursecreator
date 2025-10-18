@@ -1,0 +1,63 @@
+############# BlendX AI Course Creator: FastAPI + Celery
+blendxccapp:
+  image: {{ BLENDXCCAPP_DOCKER_IMAGE }}
+  environment:
+    ADMIN_SECRET_KEY: "{{ BLENDXCCAPP_ADMIN_SECRET_KEY }}"
+    PORTKEY_API_KEY: "{{ BLENDXCOURSECREATOR_PORTKEY_API_KEY }}"
+    PORTKEY_GATEWAY_URL: "{{ BLENDXCOURSECREATOR_PORTKEY_GATEWAY_URL | default('https://api.portkey.ai/v1') }}"
+    PORTKEY_CHAT_MODEL: "{{ BLENDXCOURSECREATOR_PORTKEY_CHAT_MODEL | default('gpt-4.1') }}"
+    PORTKEY_IMAGE_MODEL: "{{ BLENDXCOURSECREATOR_PORTKEY_IMAGE_MODEL | default('dall-e-3') }}"
+    PORTKEY_EMBEDDING_MODEL: "{{ BLENDXCOURSECREATOR_PORTKEY_EMBEDDING_MODEL | default('text-embedding-3-large') }}"
+    PORTKEY_CHAT_PROVIDER: "{{ BLENDXCOURSECREATOR_PORTKEY_CHAT_PROVIDER | default('@blended-chat') }}"
+    PORTKEY_IMAGE_PROVIDER: "{{ BLENDXCOURSECREATOR_PORTKEY_IMAGE_PROVIDER | default('@blended-image') }}"
+    PORTKEY_EMBEDDING_PROVIDER: "{{ BLENDXCOURSECREATOR_PORTKEY_EMBEDDING_PROVIDER | default('@blended-embedding') }}"
+    DATABASE_URL: "mysql+pymysql://{{ BLENDXCCAPP_MYSQL_USERNAME }}:{{ BLENDXCCAPP_MYSQL_PASSWORD }}@{{ MYSQL_HOST }}:{{ MYSQL_PORT }}/{{ BLENDXCCAPP_MYSQL_DATABASE }}"
+    CELERY_BROKER_URL: "redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/0"
+    CELERY_RESULT_BACKEND: "redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/0"
+    TEMP_DIR: "/app/temp_courses"
+    EXPORT_DIR: "/app/course_exports"
+    SYNTHESIA_API_KEY: "${SYNTHESIA_API_KEY:-}"
+    SYNTHESIA_TEMPLATE_ID: "${SYNTHESIA_TEMPLATE_ID:-}"
+    SYNTHESIA_AVATAR_ID: "${SYNTHESIA_AVATAR_ID:-}"
+    TAVILY_API_KEY: "${TAVILY_API_KEY:-}"
+    DEBUG: "{{ DEBUG | default(false) | tojson }}"
+    SECRET_KEY: "{{ BLENDXCCAPP_SECRET_KEY }}"
+  volumes:
+    - ../../data/blendxccapp:/app/data
+    - ../../data/blendxccapp/temp_courses:/app/temp_courses
+    - ../../data/blendxccapp/course_exports:/app/course_exports
+  restart: unless-stopped
+  depends_on: {{ [("mysql", RUN_MYSQL), ("redis", RUN_REDIS)]|list_if }}
+
+blendxccapp-celery:
+  image: {{ BLENDXCCAPP_DOCKER_IMAGE }}
+  command: celery -A app.tasks.celery_app worker --loglevel=info
+  environment:
+    # Same environment as blendxccapp
+    ADMIN_SECRET_KEY: "{{ BLENDXCCAPP_ADMIN_SECRET_KEY }}"
+    PORTKEY_API_KEY: "{{ BLENDXCOURSECREATOR_PORTKEY_API_KEY }}"
+    PORTKEY_GATEWAY_URL: "{{ BLENDXCOURSECREATOR_PORTKEY_GATEWAY_URL | default('https://api.portkey.ai/v1') }}"
+    PORTKEY_CHAT_MODEL: "{{ BLENDXCOURSECREATOR_PORTKEY_CHAT_MODEL | default('gpt-4.1') }}"
+    PORTKEY_IMAGE_MODEL: "{{ BLENDXCOURSECREATOR_PORTKEY_IMAGE_MODEL | default('dall-e-3') }}"
+    PORTKEY_EMBEDDING_MODEL: "{{ BLENDXCOURSECREATOR_PORTKEY_EMBEDDING_MODEL | default('text-embedding-3-large') }}"
+    PORTKEY_CHAT_PROVIDER: "{{ BLENDXCOURSECREATOR_PORTKEY_CHAT_PROVIDER | default('@blended-chat') }}"
+    PORTKEY_IMAGE_PROVIDER: "{{ BLENDXCOURSECREATOR_PORTKEY_IMAGE_PROVIDER | default('@blended-image') }}"
+    PORTKEY_EMBEDDING_PROVIDER: "{{ BLENDXCOURSECREATOR_PORTKEY_EMBEDDING_PROVIDER | default('@blended-embedding') }}"
+    DATABASE_URL: "mysql+pymysql://{{ BLENDXCCAPP_MYSQL_USERNAME }}:{{ BLENDXCCAPP_MYSQL_PASSWORD }}@{{ MYSQL_HOST }}:{{ MYSQL_PORT }}/{{ BLENDXCCAPP_MYSQL_DATABASE }}"
+    CELERY_BROKER_URL: "redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/0"
+    CELERY_RESULT_BACKEND: "redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/0"
+    TEMP_DIR: "/app/temp_courses"
+    EXPORT_DIR: "/app/course_exports"
+    SYNTHESIA_API_KEY: "${SYNTHESIA_API_KEY:-}"
+    SYNTHESIA_TEMPLATE_ID: "${SYNTHESIA_TEMPLATE_ID:-}"
+    SYNTHESIA_AVATAR_ID: "${SYNTHESIA_AVATAR_ID:-}"
+    TAVILY_API_KEY: "${TAVILY_API_KEY:-}"
+    DEBUG: "{{ DEBUG | default(false) | tojson }}"
+    SECRET_KEY: "{{ BLENDXCCAPP_SECRET_KEY }}"
+  volumes:
+    # Same volumes as blendxccapp
+    - ../../data/blendxccapp:/app/data
+    - ../../data/blendxccapp/temp_courses:/app/temp_courses
+    - ../../data/blendxccapp/course_exports:/app/course_exports
+  restart: unless-stopped
+  depends_on: {{ [("redis", RUN_REDIS), ("blendxccapp", True)]|list_if }}

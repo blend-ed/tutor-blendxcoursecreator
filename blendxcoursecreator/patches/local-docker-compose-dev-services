@@ -1,0 +1,11 @@
+blendxccapp:
+  command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+  ports:
+    - "8010:8000"
+  networks:
+    default:
+      aliases:
+        - "{{ BLENDXCCAPP_HOST }}"
+
+blendxccapp-celery:
+  command: celery -A app.tasks.celery_app worker --loglevel=debug
