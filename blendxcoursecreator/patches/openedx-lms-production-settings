@@ -1,3 +1,5 @@
 {% if not BLENDXCOURSECREATOR_ENTERPRISE_PLAN %}
 MFE_CONFIG['BLENDX_AICC_API_TYPE'] = 'blendxcoursecreator'
+{% else %}
+MFE_CONFIG['BLENDX_AICC_API_TYPE'] = 'blendxcoursecreator_enterprise'
 {% endif %}
