@@ -35,6 +35,17 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
         ("BLENDXCOURSECREATOR_PORTKEY_IMAGE_PROVIDER", "@blended-image"),
         ("BLENDXCOURSECREATOR_PORTKEY_EMBEDDING_PROVIDER", "@blended-embedding"),
 
+        # Video Component Configuration
+        ("BLENDXCOURSECREATOR_ENABLE_VIDEO_COMPONENT", False),
+        ("BLENDXCOURSECREATOR_TAVILY_API_KEY", "your-api-key-here"),
+        ("BLENDXCOURSECREATOR_ENABLE_SYNTHESIA", False),
+        ("BLENDXCOURSECREATOR_SYNTHESIA_API_KEY", "your-api-key-here"),
+        ("BLENDXCOURSECREATOR_SYNTHESIA_AVATAR_ID", "your-avatar-id-here"),
+        ("BLENDXCOURSECREATOR_SYNTHESIA_TEMPLATE_ID", "your-template-id-here"),
+
+        # Interactive Component Configuration
+        ("BLENDXCOURSECREATOR_ENABLE_INTERACTIVE_COMPONENT", False),
+
         # Blend-ed Cloud AI Course Creator API Key
         ("BLENDXCOURSECREATOR_BLENDX_AICC_KEY", "your-api-key-here"),
         ("BLENDXCOURSECREATOR_BLENDX_AICC_APP_URL", "https://aicc.blendxed.com"),

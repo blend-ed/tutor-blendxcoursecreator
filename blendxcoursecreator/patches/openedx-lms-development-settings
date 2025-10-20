@@ -3,3 +3,11 @@ MFE_CONFIG['BLENDX_AICC_API_TYPE'] = 'blendxcoursecreator'
 {% else %}
 MFE_CONFIG['BLENDX_AICC_API_TYPE'] = 'blendxcoursecreator_enterprise'
 {% endif %}
+
+{% if BLENDXCOURSECREATOR_ENABLE_VIDEO_COMPONENT %}
+MFE_CONFIG['SHOW_VIDEO_COMPONENT'] = True
+{% endif %}
+
+{% if BLENDXCOURSECREATOR_ENABLE_INTERACTIVE_COMPONENT %}
+MFE_CONFIG['SHOW_INTERACTIVE_COMPONENT'] = True
+{% endif %}
