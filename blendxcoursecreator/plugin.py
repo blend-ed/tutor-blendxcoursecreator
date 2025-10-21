@@ -46,6 +46,10 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
         # Interactive Component Configuration
         ("BLENDXCOURSECREATOR_ENABLE_INTERACTIVE_COMPONENT", False),
 
+        # Email Configuration
+        ("BLENDXCOURSECREATOR_REPLY_TO_EMAIL", "your-reply-to-email-here@blendxed.com"),
+        ("BLENDXCOURSECREATOR_ENABLE_COURSE_CREATION_EMAILS", False),
+
         # Blend-ed Cloud AI Course Creator API Key
         ("BLENDXCOURSECREATOR_BLENDX_AICC_KEY", "your-api-key-here"),
         ("BLENDXCOURSECREATOR_BLENDX_AICC_APP_URL", "https://aicc.blendxed.com"),
