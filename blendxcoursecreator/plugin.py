@@ -102,7 +102,7 @@ for path in glob(str(importlib_resources.files("blendxcoursecreator") / "patches
 
 def _get_mfe_version():
     load_dotenv()
-    return os.getenv("COURSE_CREATOR_MFE_VERSION", "master")
+    return os.getenv("COURSE_CREATOR_MFE_VERSION", "teak")
 
 def _get_github_pat():
     load_dotenv()
